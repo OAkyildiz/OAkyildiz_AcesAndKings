@@ -77,7 +77,7 @@ public class TestMouse extends KSTestCase {
 		
 		assertEquals ("KD",game.getContainer().getActiveDraggingObject().getModelElement().getName());
 		
-		//
+		//drag and release
 		
 		game.kfv1.getMouseManager().handleMouseEvent(releaseKF1);
 		
@@ -85,24 +85,25 @@ public class TestMouse extends KSTestCase {
 		assertEquals ("4S", game.tableau1.peek().toString());
 		assertEquals ("3C", game.mDeck.peek().toString());
 		
-		//
+		//Check automove flollows  amove from waste.
 		List<Move> moves =  Collections.list(game.getMoves());
 		int length = moves.size();
 		assertTrue(moves.get(length-1) instanceof DeckToTableauAutoMove);
 		assertTrue(moves.get(length-2) instanceof ToKingFoundationMove);
 		
 		//
-		//DeckToTableauAutoMove automove1 =(DeckToTableauAutoMove) moves.get(length-1);
 		
-		//undo with right click
-		MouseEvent rightClick = createRightClick(game, game.kfv1, 0, 0);
-		System.out.println("RMB");
-		game.kfv1.getMouseManager().handleMouseEvent(rightClick);
+		//undo 
+		game.undoMove();
+	
+		//undo check
+		moves=  Collections.list(game.getMoves());
+		assertTrue(moves.get(moves.size()-1) instanceof DrawCardMove);
 		
-		assertTrue(game.getMoves().nextElement() instanceof DrawCardMove);
 		assertTrue(game.KFoundation1.empty());
-		//assertEquals ("4S", game.mDeck.peek().toString());
-		//assertEquals ("KD", game.tableau1.peek().toString());
+		assertEquals ("4S", game.mDeck.peek().toString());
+		assertEquals ("KD", game.tableau1.peek().toString());
+		
 		//two clicks on deck
 		game.mDeckV.getMouseManager().handleMouseEvent(pressDeck);
 		game.mDeckV.getMouseManager().handleMouseEvent(pressDeck);
@@ -116,7 +117,7 @@ public class TestMouse extends KSTestCase {
 		
 		assertEquals ("KD", game.KFoundation1.peek().toString());
 		assertEquals ("3C", game.tableau1.peek().toString());
-		//assertEquals ("4S", game.wastePile.peek().toString());
+		assertEquals ("4S", game.wastePile.peek().toString());
 		assertTrue(game.mDeck.empty());
 		
 		moves=  Collections.list(game.getMoves());
@@ -144,8 +145,24 @@ public class TestMouse extends KSTestCase {
 		MouseEvent doubleTab2 = createDoubleClicked(game, game.tv2, 0, 0);
 		game.tv2.getMouseManager().handleMouseEvent(doubleTab2);
 		
-		assertFalse(game.tableau2.empty());
+		assertFalse(game.wastePile.empty());
+		assertEquals("4S",game.tableau2.peek().toString());
 		assertEquals("2H",game.AFoundation1.peek().toString());
+		
+		//undo auto and tableau to foundation
+		game.undoMove();
+		
+		assertEquals("AC",game.AFoundation2.peek().toString());
+		assertEquals("2H",game.tableau2.peek().toString());
+		assertEquals("4S",game.wastePile.peek().toString());
+		assertTrue(game.mDeck.empty());
+		
+		//undo reserve Col to AFound Pile
+		game.undoMove();
+		
+		assertTrue(game.AFoundation2.empty());
+		assertEquals("AC",game.reserve2.peek().toString());
+		
 		
 		
 	}

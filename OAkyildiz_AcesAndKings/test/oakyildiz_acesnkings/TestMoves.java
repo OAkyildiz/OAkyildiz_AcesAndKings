@@ -76,8 +76,8 @@ public class TestMoves extends TestCase {
 		//automove check
 		DeckToTableauAutoMove dta = new DeckToTableauAutoMove(game.mDeck, game.tableau1);
 		WasteToTableauAutoMove wta = new WasteToTableauAutoMove(game.mDeck,game.wastePile, game.tableau1);
-		Card king = game.tableau1.get();
-		ToKingFoundationMove tab1KF1 = new ToKingFoundationMove(game.tableau1, game.KFoundation1, king, true);
+	
+		ToKingFoundationMove tab1KF1 = new ToKingFoundationMove(game.tableau1, game.KFoundation1, game.tableau1.get(), true);
 		
 		assertTrue(tab1KF1.valid(game));
 		assertTrue(dta.valid(game));
@@ -85,30 +85,56 @@ public class TestMoves extends TestCase {
 		
 		//tableau to KF
 		tab1KF1.doMove(game);
+		game.pushMove(tab1KF1); //register move
 		
 		assertTrue(game.tableau1.empty());
 		assertEquals("KD", game.KFoundation1.peek().toString());
 		
 		//deck auto move
 		dta.doMove(game);
+		game.pushMove(dta);
 		
 		assertEquals(104-31-1, game.mDeck.count());
 		assertFalse(game.tableau1.empty());
 //		
-//		dta.undo(game);
-//		
-//		assertEquals(104-31, game.mDeck.count());
-//		assertEquals("KD", game.tableau1.peek().toString());
-//		assertTrue(game.KFoundation1.empty());
+		game.undoMove();
 		
-//		//waste auto move
-//		for(int j=1; j<=104-31;j++) game.mDeck.get();
 //		
-//		assertTrue(wta.valid(game));
-//		wta.doMove(game);
-//		
-//		assertEquals(0, game.mDeck.count());
-//		assertFalse(game.tableau1.empty());
+		assertEquals(104-31, game.mDeck.count());
+		assertEquals("KD", game.tableau1.peek().toString());
+		assertTrue(game.KFoundation1.empty());
+		assertFalse(game.wastePile.empty());
+		
+		//waste auto move
+		for(int j=1; j<=(104-31);j++) game.mDeck.get();		
+		
+		game.tableau1.get(); //only for test case.
+		tab1KF1.doMove(game);
+		game.pushMove(tab1KF1);
+		
+		assertEquals("KD", game.KFoundation1.peek().toString());
+		//empty tableu, wta should be valid
+		assertTrue(game.mDeck.empty());
+		assertFalse(game.wastePile.empty());
+		assertTrue(game.tableau1.empty());
+		
+		assertTrue(wta.valid(game));
+
+		wta.doMove(game);
+		game.pushMove(wta);
+		
+		assertEquals(0, game.mDeck.count());
+		assertFalse(game.tableau1.empty());
+		assertTrue(game.wastePile.empty());
+		assertEquals("KD", game.KFoundation1.peek().toString());
+		
+		//now undo
+		game.undoMove();
+		
+		assertTrue(game.KFoundation1.empty());
+		assertFalse(game.wastePile.empty());
+		assertEquals("KD", game.tableau1.peek().toString());
+		
 //		
 		
 

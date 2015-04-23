@@ -1,8 +1,5 @@
 package oakyildiz_acesnkings.moves;
 
-import java.util.Collections;
-import java.util.List;
-
 import ks.common.games.Solitaire;
 import ks.common.model.Card;
 import ks.common.model.Move;
@@ -36,11 +33,7 @@ public class WasteToTableauAutoMove extends Move{
 		waste.add(c);
 		System.out.println("Undo AutoMove from Waste");
 		
-		List<Move> moves = Collections.list(game.getMoves());
-		//pop happens after undo() returns.
-		Move prevMove = moves.get(moves.size()-1);
-				
-		if(prevMove!= null) prevMove.undo(game);
+		game.undoMove();
 		return true;
 	}
 

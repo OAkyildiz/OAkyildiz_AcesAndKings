@@ -34,11 +34,12 @@ public class ToAceFoundationMove extends Move{
 		}
 	}
 	public boolean undo(Solitaire game){
-		if(!target.empty()) target.get();
-		source.add(cardBeingDragged);
-		cardBeingDragged = null;
+		
+		source.add(target.get());
+		
 		if(point) game.updateScore(AcesNKings.penalty);
 		System.out.println("Undo ToFoundation move");
+		
 		return true;
 	}
 	public boolean valid(Solitaire game){
