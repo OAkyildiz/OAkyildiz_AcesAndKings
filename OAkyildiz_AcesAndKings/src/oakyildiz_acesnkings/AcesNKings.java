@@ -11,6 +11,7 @@ import ks.common.games.Solitaire;
 import ks.common.games.SolitaireUndoAdapter;
 import ks.common.model.MultiDeck;
 import ks.common.model.Column;
+import ks.common.model.MutableInteger;
 import ks.common.model.Pile;
 import ks.common.view.CardImages;
 import ks.common.view.DeckView;
@@ -47,8 +48,9 @@ public class AcesNKings extends Solitaire{
 	IntegerView scoreView;
 	IntegerView	cardsLeftView;
 	
+	int goal = 104;
 	public static int score = 1;
-	public static int penalty = -2;
+	public static int penalty = -1; //prefer -2
 	
 	public static final int windowW = 1100;
 	public static final int windowH = 500;
@@ -61,10 +63,12 @@ public class AcesNKings extends Solitaire{
 	
 	@Override
 	public boolean hasWon() {
-		return AFoundation1.count()==13 && AFoundation2.count()==13 && 
-				AFoundation3.count()==13 && AFoundation4.count()==13 && 
-				KFoundation1.count()==13 && KFoundation2.count()==13 && 
-				KFoundation3.count()==13 && KFoundation4.count()==13;
+//		return AFoundation1.count()==13 && AFoundation2.count()==13 && 
+//				AFoundation3.count()==13 && AFoundation4.count()==13 && 
+//				KFoundation1.count()==13 && KFoundation2.count()==13 && 
+//				KFoundation3.count()==13 && KFoundation4.count()==13;
+		
+		return (this.getScoreValue()==goal);
 	}
 	
 	@Override
@@ -326,7 +330,7 @@ public class AcesNKings extends Solitaire{
 		container.addWidget (rv2);
 		
 		scoreView = new IntegerView (getScore());
-		Font scoreFont=new Font(Font.SANS_SERIF,Font.BOLD,22);
+		Font scoreFont=new Font(Font.SANS_SERIF,Font.BOLD,20);
 		scoreView.setFont (scoreFont);
 		scoreView.setBounds (3*fullSpc+3*qtSpc+5*cardX, qtSpc+fullSpc, 60,60 );
 		container.addWidget (scoreView);

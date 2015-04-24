@@ -37,7 +37,8 @@ public class TestHasWon extends TestCase {
 			game.KFoundation3.add(testDeck.get());
 			game.KFoundation4.add(testDeck.get());
 		}
-		
+		game.updateScore(104);
+		System.out.println(game.getScoreValue());
 		assertTrue(game.hasWon());
 	}
 
