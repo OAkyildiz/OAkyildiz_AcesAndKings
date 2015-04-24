@@ -11,7 +11,6 @@ import ks.common.games.Solitaire;
 import ks.common.games.SolitaireUndoAdapter;
 import ks.common.model.MultiDeck;
 import ks.common.model.Column;
-import ks.common.model.MutableInteger;
 import ks.common.model.Pile;
 import ks.common.view.CardImages;
 import ks.common.view.DeckView;
