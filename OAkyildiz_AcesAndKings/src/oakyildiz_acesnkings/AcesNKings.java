@@ -1,6 +1,7 @@
 package oakyildiz_acesnkings;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.util.ArrayList;
 
 import oakyildiz_acesnkings.controllers.*;
@@ -325,8 +326,9 @@ public class AcesNKings extends Solitaire{
 		container.addWidget (rv2);
 		
 		scoreView = new IntegerView (getScore());
-		scoreView.setFontSize (14);
-		scoreView.setBounds (3*fullSpc+3*qtSpc+5*cardX, fullSpc, 60,60 );
+		Font scoreFont=new Font(Font.SANS_SERIF,Font.BOLD,22);
+		scoreView.setFont (scoreFont);
+		scoreView.setBounds (3*fullSpc+3*qtSpc+5*cardX, qtSpc+fullSpc, 60,60 );
 		container.addWidget (scoreView);
 
 		cardsLeftView = new IntegerView (getNumLeft());
