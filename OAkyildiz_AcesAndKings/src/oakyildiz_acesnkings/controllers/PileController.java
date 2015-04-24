@@ -20,14 +20,14 @@ import oakyildiz_acesnkings.moves.ToKingFoundationMove;
 public class PileController extends SolitaireReleasedAdapter {
 	protected AcesNKings game;
 	protected PileView sourceView;
-	
+
 	public PileController(AcesNKings game, PileView sourceView) {
 		super(game);
-		
+
 		this.game = game;
 		this.sourceView = sourceView;
 	}
-	
+
 	@Override
 	public void mousePressed(MouseEvent me) {
 		// The container manages several critical pieces of information; namely, it
@@ -41,11 +41,11 @@ public class PileController extends SolitaireReleasedAdapter {
 			cont.releaseDraggingObject();
 			return;
 		}
-	
+
 		// Get a card to move from PileView. Note: this returns a CardView.
 		// Note that this method will alter the model for BuildablePileView if the condition is met.
 		CardView cardView = sourceView.getCardViewForTopCard (me);
-		
+
 		// an invalid selection of some sort.
 		if (cardView == null) {
 			cont.releaseDraggingObject();
@@ -60,11 +60,11 @@ public class PileController extends SolitaireReleasedAdapter {
 		System.out.println("card picked up");
 		// Tell container which object is being dragged, and where in that widget the user clicked.
 		cont.setActiveDraggingObject (cardView, me);
-		
+
 		// Tell container which source widget initiated the drag
 		cont.setDragSource (sourceView);
-	
-	
+
+
 		sourceView.redraw();
 	}
 	@Override
@@ -74,53 +74,54 @@ public class PileController extends SolitaireReleasedAdapter {
 
 			// Point to our underlying model element.
 			Pile source = (Pile) sourceView.getModelElement();
-
-			// See if we can move this one card.
-			boolean moveMade = false;
-			Card c = (Card) source.peek();
-			Move m = null;
-			Pile foundation = null;
-			for (int f = 1; f <=4; f++) {
-				foundation = (Pile) game.getModelElement ("AFoundation" + f);
-				System.out.println(foundation.getName());
-				m = new ToAceFoundationMove(source, foundation, c, (!source.getName().contains("Foundation")));
-				if (m.valid(theGame)) {
-					c = source.get();
-					
-					m.doMove(game);
-					theGame.pushMove (m);
-					
-					System.out.println("target:" + f);
-					moveMade = true;
-					System.out.println(foundation.peek().toString());
-					theGame.refreshWidgets();
-					break;
-				}
-			}
-
-			if (!moveMade) {
-				for (int g = 1; g <=4; g++) {
-					foundation = (Pile) game.getModelElement ("KFoundation" + g);
-					m = new ToKingFoundationMove(source, foundation, c, (!source.getName().contains("Foundation")));
-					if (m.valid(game)) {
+			if(!source.empty()){
+				// See if we can move this one card.
+				boolean moveMade = false;
+				Card c = (Card) source.peek();
+				Move m = null;
+				Pile foundation = null;
+				for (int f = 1; f <=4; f++) {
+					foundation = (Pile) game.getModelElement ("AFoundation" + f);
+					System.out.println(foundation.getName());
+					m = new ToAceFoundationMove(source, foundation, c, (!source.getName().contains("Foundation")));
+					if (m.valid(theGame)) {
 						c = source.get();
-						
+
 						m.doMove(game);
 						theGame.pushMove (m);
-						
-						System.out.println("target:" + g);
+
+						System.out.println("target:" + f);
 						moveMade = true;
-						
+						System.out.println(foundation.peek().toString());
 						theGame.refreshWidgets();
 						break;
 					}
 				}
+
+				if (!moveMade) {
+					for (int g = 1; g <=4; g++) {
+						foundation = (Pile) game.getModelElement ("KFoundation" + g);
+						m = new ToKingFoundationMove(source, foundation, c, (!source.getName().contains("Foundation")));
+						if (m.valid(game)) {
+							c = source.get();
+
+							m.doMove(game);
+							theGame.pushMove (m);
+
+							System.out.println("target:" + g);
+							moveMade = true;
+
+							theGame.refreshWidgets();
+							break;
+						}
+					}
 					if (!moveMade){
 						java.awt.Toolkit.getDefaultToolkit().beep();
 						return; // announce our displeasure	
 					}
+				}
 			}
 		}
 	}
-	
+
 }
